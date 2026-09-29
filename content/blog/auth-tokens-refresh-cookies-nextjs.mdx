@@ -1,0 +1,127 @@
+---
+title: "Authentication in Modern Next.js Applications: Access Tokens, Refresh Tokens and Secure Cookies"
+description: "Where to keep tokens, how long they should live, and how refresh rotation and cookie flags fit together in an App Router application."
+date: "2026-09-15"
+category: "Security"
+tags: ["Authentication", "JWT", "Next.js"]
+draft: true
+projects: ["campus-connect"]
+---
+
+Authentication looks like one feature and behaves like six: credentials, sessions, token lifetimes, storage, revocation and route protection. Most bugs come from the seams between them.
+
+This is a working mental model for a JWT-based setup in a Next.js App Router application. It is not a substitute for a security review, and if you can use a well-maintained auth provider, that is often the better choice.
+
+<Callout type="todo" title="To fill in">
+Draft explainer. Add which of these patterns you used in your own projects and what you would change.
+</Callout>
+
+## Two tokens, two jobs
+
+An **access token** proves who you are on each API request. It should be short-lived, because if it leaks it is valid until it expires.
+
+A **refresh token** exists only to get a new access token. It lives longer, is sent to one endpoint, and can be revoked.
+
+| | Access token | Refresh token |
+| --- | --- | --- |
+| Purpose | Authorise API requests | Obtain new access tokens |
+| Typical lifetime | Minutes | Days to weeks |
+| Sent to | Every API route | The refresh endpoint only |
+| Stored | Memory or short-lived cookie | `HttpOnly` cookie |
+| Revocable | Only by expiry | Yes, if tracked server-side |
+
+Splitting them means a stolen access token has a small window, and the long-lived credential is exposed to far fewer requests.
+
+## Where tokens should live
+
+`localStorage` is convenient and it is the wrong place for a credential. Any script that runs on your page, including a compromised dependency, can read it.
+
+An `HttpOnly` cookie cannot be read by JavaScript at all. The trade-off is that browsers attach cookies automatically, which brings **CSRF** into scope. The cookie flags are how you manage that:
+
+- `HttpOnly` keeps scripts away from the value.
+- `Secure` sends it over HTTPS only.
+- `SameSite=Lax` (or `Strict`) stops most cross-site requests from carrying it.
+- `Path` limits where it is sent. Scope the refresh token to your refresh route.
+
+```ts title="app/api/auth/login/route.ts"
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+import { signAccessToken, signRefreshToken, verifyPassword } from "@/lib/auth";
+
+export async function POST(req: Request) {
+  const { email, password } = await req.json();
+  const user = await verifyPassword(email, password);
+  if (!user) {
+    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+  }
+
+  const jar = await cookies(); // async in current Next.js
+
+  jar.set("access_token", await signAccessToken(user.id), {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 15, // 15 minutes
+  });
+
+  jar.set("refresh_token", await signRefreshToken(user.id), {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/api/auth/refresh", // only ever sent to the refresh route
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+  });
+
+  return NextResponse.json({ ok: true });
+}
+```
+
+## Rotate refresh tokens
+
+If a refresh token can be used many times, a stolen one works until it expires. **Rotation** fixes that: every refresh issues a new refresh token and invalidates the old one.
+
+Then reuse becomes a signal. If an already-used refresh token shows up again, either the client or an attacker is replaying it, and the right response is to revoke the whole session.
+
+This needs server-side state, at minimum a record of the current token identifier per session. That is the cost of revocation.
+
+## Verify on the server, every time
+
+A token is only useful if the server checks it. Verify the signature, the expiry and the claims you depend on.
+
+```ts title="lib/auth.ts"
+import { jwtVerify } from "jose";
+
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+
+export async function readAccessToken(token: string | undefined) {
+  if (!token) return null;
+  try {
+    const { payload } = await jwtVerify(token, secret, { algorithms: ["HS256"] });
+    return payload.sub ?? null;
+  } catch {
+    return null; // expired, malformed or tampered
+  }
+}
+```
+
+Pin the accepted algorithm, keep the secret in an environment variable, and never trust a decoded but unverified token.
+
+## Where protection belongs
+
+In current Next.js the `proxy` file (the successor to `middleware`) is good for **optimistic checks**: redirect people without a session away from private pages before rendering.
+
+It should not be your only line of defence. Authorisation belongs next to the data: inside the route handler or data-access function that actually returns something sensitive.
+
+<Callout type="warning" title="Rule of thumb">
+Treat any check in the proxy as a convenience for the user experience. Treat the check next to the data as the security boundary.
+</Callout>
+
+## A short checklist
+
+1. Access tokens: short-lived, verified on every request.
+2. Refresh tokens: `HttpOnly`, `Secure`, path-scoped, rotated.
+3. No credentials in `localStorage`.
+4. Verify signature, expiry and algorithm server-side.
+5. Authorise at the data layer, not only at the edge.
+6. Have a plan for revoking a session.

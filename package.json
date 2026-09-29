@@ -6,17 +6,37 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "art": "tsx scripts/generate-art.tsx",
+    "prebuild": "npm run art"
   },
   "dependencies": {
+    "@fontsource/geist": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "github-slugger": "^2.0.0",
+    "gray-matter": "^4.0.3",
+    "lucide-react": "^1.48.0",
+    "motion": "^13.4.6",
     "next": "16.3.7",
+    "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "reading-time": "^1.5.0",
+    "rehype-pretty-code": "^0.14.5",
+    "remark-gfm": "^4.0.1",
+    "server-only": "^0.0.1",
+    "shiki": "^4.4.3",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.7",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3"
   }
 }

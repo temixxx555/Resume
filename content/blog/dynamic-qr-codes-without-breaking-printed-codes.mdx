@@ -1,0 +1,110 @@
+---
+title: "Building Dynamic QR Codes Without Breaking Existing Physical Codes"
+description: "A printed QR code is a promise you cannot edit. Here is why it should point at a link you control, and the small decisions that keep old codes working."
+date: "2026-09-22"
+category: "Architecture"
+tags: ["QR codes", "Next.js", "System design"]
+featured: true
+draft: true
+projects: ["qr-platform"]
+---
+
+A QR code on a poster, a menu or a product box is a promise that cannot be edited. Once the ink is dry, whatever the code encodes is what the world will scan for as long as the code exists.
+
+That is the whole reason **dynamic QR codes** exist, and the idea is small enough to fit in one sentence: *encode a link you control, not the destination.*
+
+<Callout type="todo" title="To fill in">
+This is a draft explainer. Add how your own platform resolves and records scans, and which decisions below you made differently.
+</Callout>
+
+## Static and dynamic, side by side
+
+A static code contains the destination itself. A dynamic code contains a short link on your domain, and your server decides where it goes.
+
+| | Static QR code | Dynamic QR code |
+| --- | --- | --- |
+| What is encoded | The final URL | A short link you own |
+| Change the destination later | No, reprint | Yes, edit a record |
+| Count scans | Not without a third party | Yes, at the redirect |
+| Pattern density | Grows with URL length | Stays small and easy to scan |
+| Failure mode | A dead link on paper | Your redirect service going down |
+
+The last row matters. Dynamic codes trade one problem for another: you can fix a wrong destination, but you have now made your redirect service part of every printed code you have ever issued.
+
+## The redirect is the product
+
+The core of the system is a single route: look up a code, log the scan, send the visitor on. In a Next.js app that is a route handler.
+
+```ts title="app/r/[code]/route.ts"
+import { NextResponse, after, type NextRequest } from "next/server";
+import { findLink, recordScan } from "@/lib/links";
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ code: string }> },
+) {
+  const { code } = await params;
+  const link = await findLink(code);
+
+  if (!link || !link.active) {
+    return NextResponse.redirect(new URL("/qr/unavailable", req.url), 302);
+  }
+
+  // Record the scan after the response is sent, so analytics never slow the redirect down.
+  after(() =>
+    recordScan({
+      code,
+      at: new Date(),
+      userAgent: req.headers.get("user-agent"),
+    }),
+  );
+
+  return NextResponse.redirect(link.destination, 307);
+}
+```
+
+Three details carry most of the weight.
+
+### Use a temporary redirect
+
+A `301` says "this moved permanently", and browsers and intermediaries are allowed to cache it for a very long time. If someone scans a code, gets a cached `301`, and you later change the destination, some phones will keep going to the old place.
+
+Use `302` or `307`. The extra request is cheap; a stale destination is not.
+
+### Never do slow work before redirecting
+
+A scan happens in a moment of intent, often on a weak mobile connection. Anything you do before the redirect is time the person spends looking at a blank screen.
+
+Look up the code, respond, and push the analytics write to run *after* the response. If the write fails, you lose a data point, not a visitor.
+
+### Decide what a dead code does
+
+Codes get deactivated, expire, or belong to accounts that lapse. Whatever you do in that case is what the person holding the printed code sees. A designed "this code is no longer active" page is a better outcome than a 404, and far better than a redirect to nowhere.
+
+## Keep the encoded data short
+
+QR codes get denser as the data grows, and denser codes are harder to scan at small sizes or on poor prints. A short code such as `yoursite.com/r/k3f9` gives you a sparse pattern that survives being printed small, folded or photographed at an angle.
+
+Short links also let you choose the **error correction level** deliberately. Higher levels tolerate more damage or a logo in the middle, but they also add modules. With a short payload you can afford the headroom.
+
+## Design the code for a long life
+
+A few habits keep old codes working years later:
+
+1. **Codes are permanent identifiers.** Never reuse or renumber them.
+2. **Destinations are data.** Change a record, never a code.
+3. **Ownership is explicit.** Know which account controls each code and what happens if that account lapses.
+4. **Appearance is separate from content.** Restyling a code should not change what it encodes.
+
+> The best dynamic QR system is the one nobody notices, because every code ever printed keeps working.
+
+<Callout>
+Whether you use a subdomain, a path on your main domain or a dedicated short domain is a real decision. A dedicated domain isolates reputation, but it is one more thing to keep renewing for as long as those codes exist.
+</Callout>
+
+## What I would check before shipping
+
+- Does the redirect respond quickly when analytics are slow or down?
+- Is there a deliberate page for inactive, expired and unknown codes?
+- Can a destination be changed without touching the code's design?
+- What happens to printed codes if an account is closed?

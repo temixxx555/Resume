@@ -1,0 +1,97 @@
+---
+title: "Engineering Campus Connect: Building a Social Platform for University Communities"
+description: "A draft outline of what makes a campus platform different from a generic social network, and the parts of Campus Connect worth writing up in detail."
+date: "2026-09-26"
+category: "Case study"
+tags: ["Campus Connect", "MongoDB", "Product engineering"]
+draft: true
+projects: ["campus-connect"]
+---
+
+Campus Connect is a full-stack social platform for university communities. I founded it and lead its development: the Next.js interface, the Express API, the MongoDB data model, authentication and deployment.
+
+This article is a **draft skeleton**. The structure and the technical framing are here; the specifics are yours to add before it is published.
+
+<Callout type="todo" title="Before publishing">
+Everything in this article is drawn from what Campus Connect does today. Anything phrased as a design principle should be replaced with what you actually decided and why. Add real numbers only if you have them.
+</Callout>
+
+## What the product has to do
+
+A generic social network has one kind of user and one kind of feed. A campus is different: the people in it have different reasons to be there.
+
+Campus Connect covers:
+
+- posts and comments, plus longer-form content
+- messaging and campus groups
+- events and event discovery
+- anonymous discussions
+- student business listings
+- leaderboards, streaks and verified badges
+- onboarding, account verification and profile management
+- flows for students, alumni, companies and general users
+
+That list is short to write and hard to build coherently. The interesting engineering is not any single feature. It is making all of them agree about *who someone is*.
+
+## Roles are part of the model
+
+The most important design decision in a product like this is treating the user type as a first-class concept.
+
+Students, alumni, companies and general users onboard differently and see different things. If the role is a UI toggle, the interface and the API drift apart. If it is part of the data model, both can be asked the same question.
+
+```ts title="A sketch of the pattern, not production code"
+type Role = "student" | "alumni" | "company" | "general";
+
+type Account = {
+  id: string;
+  role: Role;
+  verified: boolean;
+  campusId?: string;
+};
+
+// One place answers "what can this account do?" for the API and the UI.
+export function can(account: Account, action: "post" | "list-business" | "join-group") {
+  switch (action) {
+    case "post":
+      return true;
+    case "list-business":
+      return account.role === "student" || account.role === "company";
+    case "join-group":
+      return account.verified;
+  }
+}
+```
+
+<Callout type="todo" title="Replace this snippet">
+The example above illustrates the idea only. Swap it for a real excerpt from Campus Connect, or describe how permissions are actually enforced.
+</Callout>
+
+## Verification as a state, not a badge
+
+A verified badge means nothing if verification is just a boolean someone can flip. It needs to be a state that an account moves through, with rules about how it gets there.
+
+Modelled that way, several other features become simpler: badges, leaderboards and role-specific flows can all build on top of the same trustworthy fact.
+
+## Anonymity next to identity
+
+Anonymous discussions and verified profiles live in the same product, and both need to feel safe. That puts real constraints on how authorship is stored, what the API returns, and what moderators can see.
+
+<Callout type="todo" title="Write this section">
+Explain how anonymous authorship is actually handled: what is stored, what is exposed, and how moderation works.
+</Callout>
+
+## Engagement that means something
+
+Streaks and leaderboards can build a habit or produce noise. Tying them to genuine activity, rather than to things that are easy to game, is as much a product decision as a technical one.
+
+## Designed for the phone
+
+Most campus use happens on a phone, between lectures. Layouts, tap targets and loading states were designed for small screens first and expanded for desktop.
+
+## What I would write next
+
+1. The API design behind users, posts, comments, events and listings.
+2. How onboarding differs by role.
+3. What I would do differently with the data model today.
+
+If this is the kind of system you are building, [get in touch](/contact), or see the [Campus Connect case study](/work/campus-connect).

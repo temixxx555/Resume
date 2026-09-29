@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Adebayo Liberty — portfolio
 
-## Getting Started
-
-First, run the development server:
+A multi-page portfolio for a full-stack software engineer, built with Next.js (App Router), React, TypeScript,
+Tailwind CSS v4 and Motion.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # also regenerates the project sketches (see below)
+npm start
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> This repo uses a recent Next.js with breaking changes. Read `node_modules/next/dist/docs/` before changing framework
+> behaviour (see `AGENTS.md`).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route | Purpose |
+| --- | --- |
+| `/` | Overview: hero, selected work, experience, capabilities, about, research, writing, contact |
+| `/work`, `/work/[slug]` | Case-study index and detailed case studies (`campus-connect`, `qr-platform`, `boweneats`, `lss-classification`) |
+| `/about`, `/experience` | Background, principles; roles, impact, education |
+| `/blog`, `/blog/[slug]` | MDX articles with TOC, progress bar, code highlighting, related posts |
+| `/contact` | Email, links and a validated form (`/api/contact`) |
+| `/resume` | Web résumé with PDF download and print styles |
+| `sitemap.xml`, `robots.txt`, `rss.xml`, `opengraph-image` | SEO and social |
 
-## Learn More
+`Cmd/Ctrl + K` opens a command palette. The console has a small greeting.
 
-To learn more about Next.js, take a look at the following resources:
+## Where to edit things
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| To change | Edit |
+| --- | --- |
+| Name, email, links, availability, portrait, site URL | `data/site.ts` |
+| Projects and case studies | `data/projects.ts` (one object per project; empty fields render nothing) |
+| Roles, education, certifications | `data/experience.ts` |
+| Skills matrix | `data/capabilities.ts` |
+| Articles | `content/blog/*.mdx` (frontmatter: `title description date updated category tags featured draft projects`) |
+| Colours, type, spacing, motion tokens | `app/globals.css` |
+| Résumé PDF | `public/adebayo-liberty-resume.pdf` |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See `CONTENT-TODO.md` for everything that still needs your confirmation.
 
-## Deploy on Vercel
+## Design system
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Warm near-black (`#0e0d0b`) and off-white "paper" sections; one ember accent (`#ff5b2e`) used for status, active state,
+  numerals and focus.
+- Geist (sans), Geist Mono (metadata), Instrument Serif italic (a single emphasised word per headline).
+- Fluid type with `clamp()`. Tokens are CSS variables; `.paper` inverts a section.
+- Motion: a small vocabulary. CSS keyframes for the hero entrance, Motion (`motion/react`, `LazyMotion` + `m`) for
+  scroll reveals, mask reveals, the magnetic CTA and the mobile menu, and React `<ViewTransition>` for page transitions.
+  Everything respects `prefers-reduced-motion`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project sketches
+
+Until you add screenshots, each project shows an original SVG interface sketch. The source is
+`components/work/art-source.tsx`. `scripts/generate-art.tsx` renders it to static markup
+(`components/work/art-markup.generated.ts`) so React does not hydrate hundreds of SVG nodes. `npm run build` runs it
+automatically; run `npm run art` after editing the source.
+
+## Contact form
+
+`POST /api/contact` validates input, applies a honeypot, a minimum-fill-time check, same-origin check and a per-IP rate
+limit (in-memory: use a shared store on serverless). Delivery goes through `lib/mailer.ts` (Resend by default; swap
+`deliver()` for Postmark etc.). With no provider configured the form opens a prefilled `mailto:`. Copy `.env.example` to
+`.env.local` to configure it.

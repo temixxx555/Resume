@@ -1,26 +1,690 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Design tokens
+   Dark is the default surface. `.paper` inverts a section to warm off-white.
+   One accent (ember) is used sparingly: status, active state, numerals, focus.
+------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0e0d0b;
+  --bg-raised: #16150f;
+  --bg-sunken: #0a0908;
+  --fg: #ece8df;
+  --muted: #9b968a;
+  --faint: #857f72;
+  --line: rgb(236 232 223 / 0.12);
+  --line-strong: rgb(236 232 223 / 0.26);
+  --accent: #ff5b2e;
+  --on-accent: #0e0d0b;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --header-h: 4.25rem;
+  color-scheme: dark;
+}
+
+.paper {
+  --bg: #eeeae1;
+  --bg-raised: #e6e1d4;
+  --bg-sunken: #ddd8ca;
+  --fg: #15140f;
+  --muted: #5b574d;
+  --faint: #6b665b;
+  --line: rgb(21 20 15 / 0.15);
+  --line-strong: rgb(21 20 15 / 0.32);
+  --accent: #b3320a;
+  --on-accent: #ffffff;
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-raised: var(--bg-raised);
+  --color-sunken: var(--bg-sunken);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-serif-display), ui-serif, Georgia, serif;
+  --breakpoint-3xl: 112rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
+html {
+  background: var(--bg);
+  scroll-padding-top: calc(var(--header-h) + 1.5rem);
+  scrollbar-color: #3a372f transparent;
+  scrollbar-width: thin;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+/* Component classes live in the components layer so Tailwind utilities can override them. */
+@layer components {
+/* ------------------------------------------------------------------
+   Layout primitives
+------------------------------------------------------------------- */
+.wrap {
+  width: 100%;
+  max-width: 96rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: clamp(5rem, 4rem + 8vw, 11rem);
+}
+
+.surface {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.rule {
+  border-top: 1px solid var(--line);
+}
+
+/* ------------------------------------------------------------------
+   Type scale (fluid; clamp keeps giant type inside the viewport)
+------------------------------------------------------------------- */
+.t-display {
+  font-size: clamp(3.4rem, 1rem + 12.4vw, 13rem);
+  line-height: 0.84;
+  letter-spacing: -0.06em;
+  font-weight: 560;
+}
+
+.t-h1 {
+  font-size: clamp(2.6rem, 1.2rem + 6.2vw, 7.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  font-weight: 560;
+}
+
+.t-h2 {
+  font-size: clamp(2.1rem, 1.2rem + 3.6vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 560;
+}
+
+.t-article {
+  font-size: clamp(2.2rem, 1rem + 4.4vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 560;
+}
+
+.t-h3 {
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 2.05rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 560;
+}
+
+.t-lede {
+  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.6rem);
+  line-height: 1.38;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
+}
+
+.t-body {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.t-mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Editorial contrast: a single serif italic word inside a grotesk headline. */
+.serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  font-size: 1.06em;
+}
+
+.balance {
+  text-wrap: balance;
+}
+
+/* ------------------------------------------------------------------
+   Links, buttons
+------------------------------------------------------------------- */
+.u {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.5s var(--ease);
+}
+.u:hover,
+.u:focus-visible {
+  background-size: 100% 1px;
+}
+
+.u-on {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-size: 100% 1px;
+  transition: background-size 0.5s var(--ease);
+}
+.u-on:hover,
+.u-on:focus-visible {
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+}
+
+/* Nav text roll: the label slides up and an identical one replaces it. */
+.roll {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1.3;
+  height: 1.3em;
+}
+.roll > span {
+  display: block;
+  transition: transform 0.5s var(--ease);
+}
+.roll > span::after {
+  content: attr(data-text);
+  display: block;
+  color: var(--accent);
+}
+a:hover .roll > span,
+a:focus-visible .roll > span,
+button:hover .roll > span,
+button:focus-visible .roll > span {
+  transform: translateY(-100%);
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 0 1.35rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    color 0.4s var(--ease),
+    border-color 0.4s var(--ease),
+    background-color 0.4s var(--ease);
+  white-space: nowrap;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--accent);
+  transform: translateY(101%);
+  transition: transform 0.5s var(--ease);
+}
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: translateY(0);
+}
+.btn .arrow {
+  transition: transform 0.5s var(--ease);
+}
+.btn:hover .arrow,
+.btn:focus-visible .arrow {
+  transform: translateX(4px);
+}
+.btn-solid {
+  background: var(--fg);
+  color: var(--bg);
+}
+.btn-solid:hover,
+.btn-solid:focus-visible {
+  color: var(--on-accent);
+}
+.btn-ghost {
+  border: 1px solid var(--line-strong);
+  color: var(--fg);
+}
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.75rem;
+  padding: 0 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+}
+
+/* ------------------------------------------------------------------
+   Hero: CSS-only entrance so it never waits on JavaScript (LCP)
+------------------------------------------------------------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem);
+  }
+}
+@keyframes mask-up {
+  from {
+    transform: translateY(105%);
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 9px transparent;
+  }
+}
+@keyframes travel {
+  from {
+    left: 0;
+  }
+  to {
+    left: 100%;
+  }
+}
+@keyframes travel-y {
+  from {
+    top: 0;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+.in-rise {
+  animation: rise 0.7s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 50ms + 40ms);
+}
+.in-fade {
+  animation: fade 0.8s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 50ms + 40ms);
+}
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+.mask-line > span {
+  display: block;
+  animation: mask-up 0.8s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 20ms);
+}
+
+.pulse-dot {
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 4.5rem 4.5rem;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);
+  opacity: 0.55;
+}
+.grid-glow {
+  background-image: radial-gradient(circle, var(--accent) 1.2px, transparent 1.6px);
+  background-size: 1.5rem 1.5rem;
+  -webkit-mask-image: radial-gradient(
+    16rem circle at var(--mx, 50%) var(--my, 30%),
+    #000,
+    transparent 100%
+  );
+  mask-image: radial-gradient(16rem circle at var(--mx, 50%) var(--my, 30%), #000, transparent 100%);
+  opacity: 0.55;
+  transition: opacity 0.6s var(--ease);
+}
+
+/* Below-the-fold sections skip style/layout/paint until they are near the viewport. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto var(--cv, 900px);
+}
+
+/* Stack-path pipeline: a pulse travels along the line. */
+.path-line {
+  position: relative;
+  height: 1px;
+  background: var(--line-strong);
+}
+.path-line::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: travel 6s linear infinite;
+}
+
+/* ------------------------------------------------------------------
+   Project art frames
+------------------------------------------------------------------- */
+.art-frame {
+  /* Artwork is always drawn on the dark palette, whatever section it sits in. */
+  --fg: #ece8df;
+  --muted: #9b968a;
+  --line: rgb(236 232 223 / 0.12);
+  --accent: #ff5b2e;
+  position: relative;
+  overflow: hidden;
+  background: #13120f;
+  color: var(--fg);
+  border: 1px solid rgb(236 232 223 / 0.12);
+  border-radius: 6px;
+}
+.art-frame .art-inner {
+  transition: transform 1.2s var(--ease);
+}
+a:hover .art-frame .art-inner,
+a:focus-visible .art-frame .art-inner {
+  transform: scale(1.025);
+}
+
+/* ------------------------------------------------------------------
+   Article typography
+------------------------------------------------------------------- */
+.prose-editorial {
+  font-size: clamp(1.05rem, 1rem + 0.2vw, 1.175rem);
+  line-height: 1.78;
+  color: color-mix(in srgb, var(--fg) 86%, transparent);
+  max-width: 44rem;
+  min-width: 0;
+}
+.prose-editorial > * + * {
+  margin-top: 1.4em;
+}
+.prose-editorial h2 {
+  margin-top: 2.8em;
+  font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  font-weight: 560;
+  color: var(--fg);
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+.prose-editorial h3 {
+  margin-top: 2.2em;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  font-weight: 560;
+  color: var(--fg);
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+.prose-editorial a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 0.3s;
+}
+.prose-editorial a:hover {
+  text-decoration-color: var(--fg);
+}
+.prose-editorial strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+.prose-editorial ul,
+.prose-editorial ol {
+  padding-left: 1.4em;
+}
+.prose-editorial ul {
+  list-style: none;
+}
+.prose-editorial ul > li {
+  position: relative;
+}
+.prose-editorial ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.2em;
+  top: 0.78em;
+  width: 0.45em;
+  height: 1px;
+  background: var(--accent);
+}
+.prose-editorial ol {
+  list-style: decimal;
+}
+.prose-editorial ol > li::marker {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+.prose-editorial li + li {
+  margin-top: 0.5em;
+}
+.prose-editorial blockquote {
+  border-left: 2px solid var(--accent);
+  padding: 0.2em 0 0.2em 1.4em;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.5em;
+  line-height: 1.3;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+.prose-editorial :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  color: var(--fg);
+}
+.prose-editorial hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin-block: 3em;
+}
+.prose-editorial table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+  line-height: 1.5;
+}
+.prose-editorial th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.prose-editorial th,
+.prose-editorial td {
+  padding: 0.75em 1em 0.75em 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+/* Code blocks (rehype-pretty-code / shiki) */
+figure[data-rehype-pretty-code-figure] {
+  margin-block: 1.8em;
+}
+[data-rehype-pretty-code-figure] pre {
+  overflow-x: auto;
+  padding: 1.15rem 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-sunken) !important;
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  line-height: 1.7;
+  tab-size: 2;
+}
+[data-rehype-pretty-code-figure] code {
+  display: grid;
+  min-width: max-content;
+}
+[data-rehype-pretty-code-figure] [data-line] {
+  padding-inline: 1.25rem;
+}
+[data-rehype-pretty-code-title] {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  padding: 0 0 0.6rem;
+}
+[data-rehype-pretty-code-figure] [data-highlighted-line] {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+/* ------------------------------------------------------------------
+   Page transitions (React <ViewTransition> + View Transitions API)
+------------------------------------------------------------------- */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+::view-transition-old(.page-exit) {
+  animation: 180ms var(--ease-in-out) both vt-out;
+}
+::view-transition-new(.page-enter) {
+  animation: 420ms var(--ease) 120ms both vt-in;
+}
+::view-transition-group(.project-morph) {
+  animation-duration: 520ms;
+  animation-timing-function: var(--ease);
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion: keep the layout, drop the movement
+------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .in-rise,
+  .in-fade,
+  .mask-line > span,
+  .pulse-dot,
+  .path-line::after {
+    animation: none !important;
+  }
+  .btn::before,
+  .u,
+  .u-on,
+  .roll > span,
+  .art-frame .art-inner {
+    transition: none !important;
+  }
+}
+
+/* Print: the /resume page prints cleanly on one or two pages. */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
 }
