@@ -14,6 +14,7 @@ import {
   type PaletteItem,
 } from "@/components/layout/PaletteMount";
 import { ConsoleGreeting } from "@/components/layout/ConsoleGreeting";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const sans = Geist({
   variable: "--font-geist-sans",
@@ -176,6 +177,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className='min-h-svh' cz-shortcut-listen='true'>
+        <ScrollToTop />
         <a
           href='#main'
           className='fixed top-3 left-3 z-[100] -translate-y-20 rounded-md bg-fg px-4 py-2.5 text-sm font-medium text-bg transition-transform focus:translate-y-0'
