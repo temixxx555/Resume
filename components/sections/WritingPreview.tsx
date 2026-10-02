@@ -6,7 +6,7 @@ import { MaskText, Reveal } from "@/components/motion/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 export function WritingPreview() {
-  const posts = getAllPosts().slice(0, 3);
+  const posts = getAllPosts().slice(0, 4);
   if (posts.length === 0) return null;
   return (
     <section aria-labelledby="writing-title" className="cv-auto surface section border-t border-line">

@@ -5,12 +5,14 @@
 
 export const site = {
   name: "Adebayo Oluwamotemi Liberty",
-  displayName: "Adebayo Liberty",
-  initials: "AL",
+  displayName: "Adebayo Temi",
+  initials: "AT",
   role: "Full-Stack Software Engineer",
   // Set NEXT_PUBLIC_SITE_URL in production. The fallback is a placeholder domain.
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://adebayoliberty.dev").replace(/\/$/, ""),
-  title: "Adebayo Liberty — Full-Stack Software Engineer",
+  url: (
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://adebayoliberty.dev"
+  ).replace(/\/$/, ""),
+  title: "Adebayo Temi — Full-Stack Software Engineer",
   description:
     "Adebayo Oluwamotemi Liberty is a full-stack software engineer in Lagos, Nigeria. He builds products end to end with Next.js, React, TypeScript, Node.js and MongoDB.",
   locale: "en_NG",
@@ -27,9 +29,10 @@ export const site = {
 export const personal = {
   email: "temiq3@gmail.com",
   github: "https://github.com/temixxx555",
+  whatsapp: "https://wa.me/2349138721435",
   githubHandle: "temixxx555",
   // Handle taken from the resume ("temi-adebayo"). Verify the exact profile URL.
-  linkedin: "https://www.linkedin.com/in/temi-adebayo",
+  linkedin: "https://www.linkedin.com/in/temi-adebayo-822458289",
   linkedinHandle: "temi-adebayo",
   x: null as string | null,
   previousSite: "https://temiq3.vercel.app",
@@ -40,7 +43,7 @@ export const personal = {
     detail: "Also considering select contract work",
   },
   /** Drop a real photo in /public and fill this in. The About page is designed to work without it. */
-  portrait: null as null | { src: string; alt: string; width: number; height: number },
+  portrait: { src: "/avatar.png", alt: "avatar", width: 100, height: 100 },
 } as const;
 
 export const nav = [
@@ -53,6 +56,14 @@ export const nav = [
 export const contactHref = "/contact";
 
 export const socials = [
-  { label: "GitHub", href: personal.github, handle: `@${personal.githubHandle}` },
-  { label: "LinkedIn", href: personal.linkedin, handle: personal.linkedinHandle },
+  {
+    label: "GitHub",
+    href: personal.github,
+    handle: `@${personal.githubHandle}`,
+  },
+  {
+    label: "LinkedIn",
+    href: personal.linkedin,
+    handle: personal.linkedinHandle,
+  },
 ] as const;

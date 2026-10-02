@@ -5,15 +5,15 @@ _framing_ that only you can verify. Search the repo for `todos:` in `data/projec
 
 ## Needed before you publish
 
-| Item | Where | Notes |
-| --- | --- | --- |
-| Real domain | `NEXT_PUBLIC_SITE_URL` (`.env`) | Fallback is the placeholder `adebayoliberty.dev`. Canonical URLs, sitemap and OG tags use it. |
-| LinkedIn URL | `data/site.ts` → `personal.linkedin` | Built from the handle `temi-adebayo` in your résumé. Confirm it opens your profile. |
-| Live and GitHub links | `data/projects.ts` → `liveUrl`, `githubUrl` | All unset, so nothing is shown. Add per project. |
-| Real screenshots | `data/projects.ts` → `thumbnail`, `heroImage`, `gallery` | Drop images in `public/`. Until then each project shows an original interface sketch, captioned as a sketch. |
-| Project years | `data/projects.ts` → `year` | Only LSS (2026) is set. Others are hidden until you add them. |
-| Portrait (optional) | `data/site.ts` → `personal.portrait` | The About page uses a typographic panel until you add one. |
-| Email delivery (optional) | `.env` → `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` | Without them the contact form opens a prefilled `mailto:`. |
+| Item                      | Where                                                    | Notes                                                                                                        |
+| ------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Real domain               | `NEXT_PUBLIC_SITE_URL` (`.env`)                          | Fallback is the placeholder `adebayoliberty.dev`. Canonical URLs, sitemap and OG tags use it.                |
+| LinkedIn URL              | `data/site.ts` → `personal.linkedin`                     | Built from the handle `temi-adebayo` in your résumé. Confirm it opens your profile.                          |
+| Live and GitHub links     | `data/projects.ts` → `liveUrl`, `githubUrl`              | All unset, so nothing is shown. Add per project.                                                             |
+| Real screenshots          | `data/projects.ts` → `thumbnail`, `heroImage`, `gallery` | Drop images in `public/`. Until then each project shows an original interface sketch, captioned as a sketch. |
+| Project years             | `data/projects.ts` → `year`                              | Only LSS (2026) is set. Others are hidden until you add them.                                                |
+| Portrait (optional)       | `data/site.ts` → `personal.portrait`                     | The About page uses a typographic panel until you add one.                                                   |
+| Email delivery (optional) | `.env` → `RESEND_API_KEY`, `CONTACT_FROM_EMAIL`          | Without them the contact form opens a prefilled `mailto:`.                                                   |
 
 ## Copy that is framing, not fact. Please read and rewrite in your own words
 

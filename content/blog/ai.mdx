@@ -1,0 +1,909 @@
+---
+title: "The Future of Software Engineering in the Age of AI"
+description: "AI is making code dramatically cheaper to produce. The role of the software engineer is shifting from writing every line manually to defining systems, directing agents, verifying output and owning the result."
+date: "2026-10-02"
+category: "Engineering"
+tags: ["AI", "Software Engineering", "Future of Coding", "System Design"]
+featured: true
+draft: false
+projects: []
+---
+
+For most of software history, writing code was expensive.
+
+A feature that required ten thousand lines of code also required somebody to understand the problem, design the system, write the implementation, debug it, test it, deploy it and maintain it.
+
+Artificial intelligence is changing one part of that equation very quickly:
+
+**the cost of producing code is collapsing.**
+
+A developer can now describe a feature in natural language and receive components, API routes, database schemas, tests and deployment configuration in minutes.
+
+That creates an obvious question:
+
+> If AI can write the code, what exactly is the software engineer still for?
+
+The answer is not that software engineers disappear.
+
+The answer is that **software engineering moves to a higher level of abstraction.**
+
+<Callout type="info" title="The core shift">
+The valuable skill is gradually moving from "How fast can you write code?" to "How well can you define, build, verify and operate a system?"
+</Callout>
+
+## Coding and software engineering were never the same thing
+
+Writing code is only one part of building software.
+
+Imagine asking an AI:
+
+> Build an authentication system.
+
+It can probably generate one.
+
+But that instruction immediately hides dozens of decisions:
+
+- Passwords, magic links or OAuth?
+- Sessions or JWTs?
+- Where are refresh tokens stored?
+- How are sessions revoked?
+- What happens when a user changes their password?
+- Can one account belong to multiple organizations?
+- Which roles exist?
+- What permissions does each role have?
+- What happens when an employee leaves an organization?
+- How are suspicious login attempts handled?
+- What should be logged?
+- What data should never be logged?
+- What happens when the authentication provider is unavailable?
+
+The difficult part was never just writing:
+
+```ts
+export async function POST(req: Request) {
+  // login logic
+}
+```
+
+The difficult part is deciding **what that endpoint should mean inside the larger system.**
+
+AI can generate implementations extremely quickly.
+
+Engineering is deciding whether those implementations are correct, safe and appropriate.
+
+## The software engineering workflow is changing
+
+The traditional workflow looked something like this:
+
+```text
+Idea
+  ↓
+Requirements
+  ↓
+Architecture
+  ↓
+Write code
+  ↓
+Debug
+  ↓
+Test
+  ↓
+Deploy
+  ↓
+Maintain
+```
+
+AI compresses the implementation stage.
+
+A more AI-native workflow looks like this:
+
+```text
+Problem
+   ↓
+Specification
+   ↓
+Architecture
+   ↓
+AI / Coding Agents
+   ↓
+Review + Verification
+   ↓
+Testing
+   ↓
+Deployment
+   ↓
+Observation
+   ↓
+Iteration
+```
+
+The amount of time spent manually producing syntax decreases.
+
+The amount of responsibility around the code does not.
+
+In many cases, it increases.
+
+## Software engineers become system directors
+
+There is a useful way to think about AI coding agents.
+
+They are extremely fast software assistants with unusual strengths.
+
+They can:
+
+- generate large amounts of code
+- understand unfamiliar libraries quickly
+- create tests
+- refactor repetitive systems
+- translate designs into components
+- explain unfamiliar code
+- search through large codebases
+- implement clearly specified features
+
+But they can also:
+
+- misunderstand requirements
+- invent APIs that do not exist
+- duplicate functionality
+- create subtle security problems
+- introduce unnecessary abstractions
+- solve the wrong problem perfectly
+- produce code that looks correct without actually being correct
+
+That changes the engineer's role.
+
+Instead of personally constructing every brick, the engineer increasingly becomes the person deciding:
+
+**what should be built, how the pieces fit together and whether the result can be trusted.**
+
+## Specification becomes an engineering skill
+
+Poor instructions produce poor systems.
+
+Consider these two prompts.
+
+The first:
+
+> Add organizations to the app.
+
+The second:
+
+> Add multi-tenant organizations. A user may belong to multiple organizations. Each membership has one of three roles: owner, admin or member. Organizations must always have at least one owner. Every organization-scoped API route must verify membership before accessing data.
+
+Both describe the same broad feature.
+
+Only one describes the system precisely enough to implement safely.
+
+As coding becomes cheaper, **clarity becomes more valuable.**
+
+Engineers will spend more time defining:
+
+- invariants
+- permissions
+- constraints
+- failure conditions
+- data ownership
+- API contracts
+- acceptance criteria
+
+The specification increasingly becomes part of the engineering itself.
+
+## Architecture matters more when code becomes cheap
+
+There is an interesting paradox.
+
+AI makes it easier to create software.
+
+That also makes it easier to create **bad software at enormous speed.**
+
+A human developer might slowly build one badly designed service.
+
+An AI agent can generate fifteen of them before lunch.
+
+The bottleneck moves from implementation speed to architectural judgment.
+
+An engineer still needs to answer questions like:
+
+```text
+Should this be one application or multiple services?
+
+Should this operation be synchronous?
+
+Should this data live in SQL, MongoDB or object storage?
+
+Should this event be processed immediately or through a queue?
+
+Which service owns this data?
+
+What happens when this dependency fails?
+
+Where does authorization happen?
+
+What must remain strongly consistent?
+
+What can be eventually consistent?
+```
+
+These questions cannot be solved by generating more code.
+
+They require understanding trade-offs.
+
+## The engineer becomes the verifier
+
+AI-generated code creates a new engineering problem:
+
+**Who checks the machine?**
+
+Consider a payment endpoint generated by an agent:
+
+```ts
+const payment = await paystack.verify(reference);
+
+if (payment.status === "success") {
+  await activateSubscription(user.id);
+}
+```
+
+It looks reasonable.
+
+But several questions remain.
+
+What if the request is replayed?
+
+What if two requests arrive at the same time?
+
+What if payment verification succeeds but database persistence fails?
+
+What if the amount paid does not match the selected plan?
+
+What if the currency is wrong?
+
+What if another user's payment reference is submitted?
+
+What if the provider sends the webhook twice?
+
+The generated code might compile.
+
+The engineering problem is determining whether the system is **correct under reality.**
+
+That makes testing, observability and verification more important, not less.
+
+## Understanding code becomes more important, not less
+
+There is a dangerous workflow with AI:
+
+Generate code.
+
+See that the page works.
+
+Move on.
+
+That works until something breaks.
+
+Then you are responsible for a system you do not understand.
+
+AI-assisted engineering works best when the engineer maintains a mental model of the application:
+
+```text
+Browser
+   ↓
+Frontend
+   ↓
+API
+   ↓
+Authentication
+   ↓
+Business Logic
+   ↓
+Database
+   ↓
+External Services
+```
+
+You do not need to memorize every line.
+
+You need to understand **how information flows through the system.**
+
+When a request fails, you should be able to reason:
+
+```text
+Did the browser send the request?
+
+Did middleware block it?
+
+Was the session valid?
+
+Did the API receive the correct payload?
+
+Did validation fail?
+
+Did the database query return nothing?
+
+Did an external provider fail?
+```
+
+That mental model is becoming more valuable than memorizing syntax.
+
+## Software engineering keeps moving up abstraction layers
+
+This is not the first time software development has changed like this.
+
+Early programmers worked much closer to hardware.
+
+Then came assembly.
+
+Then higher-level programming languages.
+
+Then frameworks.
+
+Then cloud platforms.
+
+Then managed databases.
+
+Then serverless infrastructure.
+
+Now AI adds another abstraction layer.
+
+A developer once wrote:
+
+```asm
+MOV AX, BX
+```
+
+Later:
+
+```c
+userCount++;
+```
+
+Later:
+
+```ts
+await db.users.create({ data });
+```
+
+And increasingly:
+
+```text
+Add organization invitations with expiration,
+role assignment and email notifications.
+```
+
+The engineer moves further away from individual instructions and closer to expressing **intent**.
+
+But every abstraction still requires somebody who understands what is underneath when it fails.
+
+## What happens to junior developers?
+
+This may be one of the biggest changes coming to software engineering.
+
+Traditionally, junior developers learned by doing large amounts of relatively straightforward work:
+
+- creating forms
+- building CRUD endpoints
+- fixing small bugs
+- converting designs to components
+- writing repetitive tests
+- connecting APIs
+- building dashboards
+
+Those are exactly the tasks AI is becoming extremely good at.
+
+That means the entry path into software engineering may change.
+
+Companies may need fewer developers whose only strength is implementation.
+
+But beginners are not becoming unnecessary.
+
+They need to learn differently.
+
+The strongest junior engineers will increasingly be the ones who can use AI while still understanding:
+
+- HTTP
+- databases
+- authentication
+- operating systems
+- networking
+- data structures
+- Git
+- testing
+- debugging
+- security fundamentals
+
+AI can hide complexity.
+
+Good engineers deliberately learn enough to uncover it again.
+
+<Callout type="warning" title="The danger of AI-first learning">
+If you can generate an authentication system but cannot explain sessions, cookies, authorization or token expiry, you do not really own the system yet.
+</Callout>
+
+## The most valuable engineers will own outcomes
+
+There is another shift happening.
+
+The old measurement was often:
+
+> How much code did you write?
+
+That measurement was already weak.
+
+In an AI-heavy world, it becomes almost meaningless.
+
+A developer may generate 30,000 lines in one day.
+
+That says nothing about whether the product became better.
+
+A better question is:
+
+> What problem did you solve?
+
+An engineer who deletes 5,000 lines and simplifies a system may provide more value than someone who generates another 50,000.
+
+The future engineer is closer to a product builder.
+
+They understand this chain:
+
+```text
+User Problem
+     ↓
+Product Decision
+     ↓
+Technical Design
+     ↓
+Implementation
+     ↓
+Measurement
+```
+
+The code is part of the solution.
+
+It is not the objective.
+
+## AI will probably create much more software
+
+One consequence is easy to underestimate.
+
+If software becomes dramatically cheaper to build, we probably do not simply build the same amount of software with fewer developers.
+
+We build **far more software.**
+
+Companies that previously could not justify building an internal tool will build one.
+
+Small businesses will create custom systems.
+
+Individuals will create software for extremely narrow problems.
+
+Teams will replace spreadsheets with applications.
+
+Products will become more personalized.
+
+Experiments that previously required months may take days.
+
+That creates new engineering problems:
+
+- more systems to secure
+- more systems to maintain
+- more integrations
+- more data
+- more infrastructure
+- more technical debt
+- more AI-generated vulnerabilities
+- more abandoned software
+
+AI removes one bottleneck while creating several others.
+
+## The future engineer will work at multiple levels
+
+A strong software engineer in the AI era will probably move between several levels of abstraction.
+
+At one moment:
+
+```text
+Design the architecture.
+```
+
+Then:
+
+```text
+Ask an agent to implement the feature.
+```
+
+Then:
+
+```text
+Review the generated database migration.
+```
+
+Then:
+
+```text
+Inspect a race condition.
+```
+
+Then:
+
+```text
+Read the production logs.
+```
+
+Then:
+
+```text
+Talk to users and realize the feature itself was wrong.
+```
+
+That ability to move between product, system design and implementation is extremely valuable.
+
+## What should software engineers learn now?
+
+I would divide the future software engineer's skills into five layers.
+
+### 1. Fundamentals
+
+Understand what the abstractions are hiding.
+
+Learn:
+
+- networking
+- HTTP
+- databases
+- operating systems
+- authentication
+- security
+- data structures
+- concurrency
+
+You may not implement these things manually every day.
+
+That is exactly why understanding them matters.
+
+### 2. System design
+
+Learn how software fits together.
+
+Understand:
+
+- caching
+- queues
+- databases
+- object storage
+- APIs
+- event-driven systems
+- horizontal scaling
+- consistency
+- fault tolerance
+- rate limiting
+- observability
+
+### 3. AI orchestration
+
+Learn how to work with coding agents effectively.
+
+That means learning how to:
+
+- supply the correct context
+- break large tasks into smaller tasks
+- define acceptance criteria
+- review generated code
+- request tests
+- control scope
+- prevent unnecessary rewrites
+- compare alternative implementations
+
+Using AI well will become an engineering skill of its own.
+
+### 4. Product thinking
+
+The engineer who understands the user can make better technical decisions.
+
+Learn to ask:
+
+> Why are we building this?
+
+before:
+
+> How do I code this?
+
+Sometimes the best engineering decision is not a more advanced implementation.
+
+It is removing the feature.
+
+### 5. Judgment
+
+This may become the most important layer.
+
+Knowing when not to build something.
+
+Knowing when an abstraction is unnecessary.
+
+Knowing when generated code looks suspicious.
+
+Knowing when a dependency is too risky.
+
+Knowing when a simple solution is enough.
+
+Knowing when a system is becoming too complex.
+
+Judgment is difficult to automate because it depends on context.
+
+## The engineer who only writes code is vulnerable
+
+If your entire value is:
+
+> Give me a ticket and I will convert it into code.
+
+AI is moving directly into that territory.
+
+But if your value is:
+
+> Give me a messy problem and I will understand it, design the system, use the right tools, direct AI where useful, verify the implementation and take responsibility for the result.
+
+That remains valuable.
+
+The difference is important.
+
+One person is a **code producer**.
+
+The other is an **engineer**.
+
+<Callout type="info" title="The shift">
+The future of software engineering is not no-code. It is higher-level engineering: less time translating ideas into syntax, and more time deciding what the software should do and proving that it does it correctly.
+</Callout>
+
+## A realistic AI-native workflow
+
+A future engineer might start a feature by writing:
+
+```text
+Goal:
+Organizations need to invite employees into their workspace.
+
+Rules:
+- Invitations expire after 72 hours.
+- Only owners and admins may invite.
+- Invitations belong to one organization.
+- Existing members cannot be invited again.
+- Accepting an invitation creates a membership.
+- Invitation acceptance must be idempotent.
+```
+
+An AI agent can then implement:
+
+```text
+Database schema
+API routes
+Email template
+Frontend form
+Validation
+Tests
+```
+
+The engineer reviews the architecture, runs the tests, checks security boundaries, tests failure cases and observes the feature in production.
+
+The engineer may have written very little of the final code manually.
+
+But they still engineered the system.
+
+That distinction will become increasingly normal.
+
+## What happens when one engineer can do the work of five?
+
+This is where AI becomes more than a coding tool.
+
+If one engineer can:
+
+- design the feature
+- generate the frontend
+- generate the backend
+- create tests
+- write migrations
+- create documentation
+- debug failures
+- deploy the system
+
+then the size of software teams may change.
+
+Small teams may become capable of building products that previously required much larger engineering organizations.
+
+That does not automatically mean every company will fire most of its developers.
+
+It means the amount of leverage available to each developer increases.
+
+A five-person team may attempt what previously required twenty people.
+
+A solo founder may build something that previously required a small startup.
+
+A large company may ship more experiments with the same engineering organization.
+
+The important unit becomes less:
+
+```text
+Developers
+```
+
+and more:
+
+```text
+Capability per developer
+```
+
+## There may be another abstraction layer after AI coding agents
+
+AI coding agents are probably not the final abstraction.
+
+Today we often tell an agent:
+
+```text
+Create this API route.
+```
+
+or:
+
+```text
+Build this dashboard.
+```
+
+The next abstraction may look more like:
+
+```text
+Here is the business objective.
+
+Here are the constraints.
+
+Here are our systems.
+
+Plan, implement, test and deploy the change.
+```
+
+At that point, the engineer becomes even less involved in individual files.
+
+Instead, they supervise systems of agents working across:
+
+- product requirements
+- frontend
+- backend
+- infrastructure
+- testing
+- security
+- deployment
+- monitoring
+
+The human engineer becomes the point where responsibility ultimately stops.
+
+The abstraction may rise.
+
+Accountability does not disappear.
+
+## Debugging may become one of the most important skills
+
+When AI produces code faster than humans can read it, debugging becomes increasingly important.
+
+The question becomes less:
+
+> Can I write this implementation?
+
+and more:
+
+> Can I understand why this system is behaving incorrectly?
+
+Debugging requires building hypotheses.
+
+You observe:
+
+```text
+POST /api/organizations → 500
+```
+
+Then investigate:
+
+```text
+Request payload correct?
+        ↓
+Authentication valid?
+        ↓
+Authorization passed?
+        ↓
+Database connection?
+        ↓
+Schema mismatch?
+        ↓
+External service?
+```
+
+AI can help investigate.
+
+But the engineer still needs to distinguish signal from noise.
+
+That is one reason fundamentals remain valuable.
+
+## Reading code may become more important than writing it
+
+Developers historically spent significant time both reading and writing code.
+
+AI changes that balance.
+
+If machines generate more implementation, engineers will spend more time:
+
+- reviewing diffs
+- understanding unfamiliar code
+- checking architecture
+- validating assumptions
+- tracing failures
+- simplifying generated systems
+
+This creates an interesting future:
+
+**the ability to understand code may become more valuable than the ability to type code quickly.**
+
+## Security becomes a larger responsibility
+
+AI makes software creation accessible to more people.
+
+That is powerful.
+
+It also means more software will be built by people who may not deeply understand:
+
+- authorization
+- SQL injection
+- XSS
+- CSRF
+- secrets management
+- rate limiting
+- access control
+- encryption
+- dependency risk
+
+A generated application can look excellent while containing serious vulnerabilities.
+
+The future engineer therefore needs to ask questions like:
+
+```text
+Can one user access another user's resource?
+
+Are permissions checked on the server?
+
+Can this endpoint be abused repeatedly?
+
+Are secrets exposed to the client?
+
+Can this input reach a database query unsafely?
+
+What happens if the attacker ignores the frontend entirely?
+```
+
+AI makes building easier.
+
+It does not make attackers disappear.
+
+## The future is not about typing faster
+
+For years, developers became better programmers partly by learning how to produce code faster.
+
+Autocomplete helped.
+
+Frameworks helped.
+
+Libraries helped.
+
+AI is the largest jump yet.
+
+But eventually code generation becomes so fast that generating another hundred lines has almost no value.
+
+The scarce things become:
+
+**good ideas, clear requirements, sound architecture, reliable verification and good judgment.**
+
+Software engineering is moving from:
+
+> How do I write this?
+
+toward:
+
+> What should exist, how should it behave, and how do I know it is correct?
+
+That is a much larger job than coding.
+
+And in many ways, it is closer to what software engineering was supposed to be all along.
+
+> AI may make writing software easier than ever. Building good software will remain an engineering problem.

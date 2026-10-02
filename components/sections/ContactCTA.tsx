@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { GithubIcon, LinkedinIcon } from "@/components/ui/BrandIcons";
+import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/ui/BrandIcons";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { MaskText, Reveal } from "@/components/motion/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -34,14 +34,19 @@ export function ContactCTA({ index = "07", heading }: { index?: string; heading?
               </Button>
             </Magnetic>
             <ul className="flex flex-wrap gap-x-7 gap-y-2 text-[0.95rem]">
-              <li>
+              {/* <li>
                 <Link href="/contact" className="u inline-flex min-h-9 items-center">
                   Contact page
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <a href={personal.linkedin} target="_blank" rel="noopener noreferrer" className="u inline-flex min-h-9 items-center gap-2">
                   <LinkedinIcon className="size-4" /> LinkedIn
+                </a>
+              </li>
+              <li>
+                <a href={personal.whatsapp} target="_blank" rel="noopener noreferrer" className="u inline-flex min-h-9 items-center gap-2">
+                  <WhatsappIcon className="size-4" /> Whatsapp
                 </a>
               </li>
               <li>

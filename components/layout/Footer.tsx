@@ -40,11 +40,11 @@ export function Footer() {
                 </a>
               </li>
             ))}
-            <li>
+            {/* <li>
               <a href="/rss.xml" className="u">
                 RSS
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

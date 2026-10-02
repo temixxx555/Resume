@@ -4,7 +4,7 @@ import { personal, site } from "@/data/site";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { MaskText, Reveal } from "@/components/motion/Reveal";
 import { SectionLabel } from "@/components/ui/SectionLabel";
-import { GithubIcon, LinkedinIcon } from "@/components/ui/BrandIcons";
+import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/ui/BrandIcons";
 import { LocalTime } from "@/components/layout/LocalTime";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { CopyEmail } from "@/components/sections/CopyEmail";
@@ -61,6 +61,14 @@ export default function Contact() {
                         <GithubIcon className="size-5" /> GitHub
                       </span>
                       <span className="t-mono text-muted transition-colors group-hover:text-accent">@{personal.githubHandle} ↗</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href={personal.whatsapp} target="_blank" rel="noopener noreferrer" className="group flex min-h-14 items-center justify-between border-b border-line">
+                      <span className="inline-flex items-center gap-3">
+                        <WhatsappIcon className="size-5" /> Whatsapp
+                      </span>
+                      <span className="t-mono text-muted transition-colors group-hover:text-accent">+234 91 3872 1435 ↗</span>
                     </a>
                   </li>
                   <li>

@@ -22,12 +22,21 @@ export type Project = {
   stack: { label: string; items: string[] }[];
   problem: string[];
   solution: { intro?: string; features: string[] };
-  architecture?: { summary?: string; layers: { label: string; items: string[] }[] };
+  architecture?: {
+    summary?: string;
+    layers: { label: string; items: string[] }[];
+  };
   decisions: { title: string; body: string }[];
   challenges?: { title: string; body: string }[];
   results?: { label: string; detail: string }[];
   inProgress?: { title: string; body: string };
-  gallery?: { src: string; alt: string; caption?: string; width: number; height: number }[];
+  gallery?: {
+    src: string;
+    alt: string;
+    caption?: string;
+    width: number;
+    height: number;
+  }[];
   related: { posts: string[]; projects: string[] };
   /** Owner-facing notes: things to confirm or replace with your own words. Never rendered. */
   todos: string[];
@@ -36,7 +45,30 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "campus-connect",
+    year: "2025",
     number: "01",
+    thumbnail: {
+      src: "/campusapp.png",
+      alt: "Campus Connect dashboard",
+      width: 100,
+      height: 100,
+    },
+
+    heroImage: {
+      src: "/campusapp.png",
+      alt: "Campus Connect social platform",
+      width: 100,
+      height: 100,
+    },
+    gallery: [
+      {
+        src: "/campusapp.png",
+        alt: "Home Screen ",
+        caption: "Home Screen ",
+        width: 1600,
+        height: 1000,
+      },
+    ],
     title: "Campus Connect",
     tagline: "A social platform built for university communities.",
     shortDescription:
@@ -51,7 +83,10 @@ export const projects: Project[] = [
     featured: true,
     art: "campus-connect",
     stack: [
-      { label: "Frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS"] },
+      {
+        label: "Frontend",
+        items: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+      },
       { label: "Backend", items: ["Node.js", "Express.js", "REST APIs"] },
       { label: "Data", items: ["MongoDB"] },
     ],
@@ -78,10 +113,34 @@ export const projects: Project[] = [
       summary:
         "A conventional, deliberately boring split: a Next.js client, a REST API, and a document database. The interesting work is in the domain model rather than the plumbing.",
       layers: [
-        { label: "Client", items: ["Next.js + React", "Responsive, mobile-first UI", "Reusable components"] },
-        { label: "API", items: ["Express.js REST endpoints", "Users, posts, comments", "Events, listings, engagement"] },
-        { label: "Access", items: ["Authentication", "Account verification", "Role-aware permissions"] },
-        { label: "Data", items: ["MongoDB", "Users and profiles", "Content and activity"] },
+        {
+          label: "Client",
+          items: [
+            "Next.js + React",
+            "Responsive, mobile-first UI",
+            "Reusable components",
+          ],
+        },
+        {
+          label: "API",
+          items: [
+            "Express.js REST endpoints",
+            "Users, posts, comments",
+            "Events, listings, engagement",
+          ],
+        },
+        {
+          label: "Access",
+          items: [
+            "Authentication",
+            "Account verification",
+            "Role-aware permissions",
+          ],
+        },
+        {
+          label: "Data",
+          items: ["MongoDB", "Users and profiles", "Content and activity"],
+        },
       ],
     },
     decisions: [
@@ -113,7 +172,10 @@ export const projects: Project[] = [
       },
     ],
     related: {
-      posts: ["campus-connect-role-aware-social-platform", "auth-tokens-refresh-cookies-nextjs"],
+      posts: [
+        "campus-connect-role-aware-social-platform",
+        "auth-tokens-refresh-cookies-nextjs",
+      ],
       projects: ["qr-platform", "boweneats"],
     },
     todos: [
@@ -128,6 +190,19 @@ export const projects: Project[] = [
     slug: "qr-platform",
     number: "02",
     title: "QR Platform",
+    thumbnail: {
+      src: "/qr.jpg",
+      alt: "Campus Connect dashboard",
+      width: 100,
+      height: 100,
+    },
+
+    heroImage: {
+      src: "/qr.jpg",
+      alt: "Campus Connect social platform",
+      width: 100,
+      height: 100,
+    },
     tagline: "A QR-code SaaS with billing and analytics.",
     shortDescription:
       "A Next.js platform for creating, customising and managing QR codes, with authentication, dashboards, subscription billing through Paystack, and scan analytics.",
@@ -143,7 +218,10 @@ export const projects: Project[] = [
     stack: [
       { label: "Frontend", items: ["Next.js", "React", "Tailwind CSS"] },
       { label: "Payments", items: ["Paystack"] },
-      { label: "Platform", items: ["Authentication", "Analytics", "Production deployment"] },
+      {
+        label: "Platform",
+        items: ["Authentication", "Analytics", "Production deployment"],
+      },
     ],
     problem: [
       "A QR code is a printed commitment. Once it is on a poster, a menu or a product box, it cannot be edited, so a code that points at the wrong place is expensive to fix.",
@@ -167,9 +245,18 @@ export const projects: Project[] = [
         "A Next.js application organised around the QR code as the central entity, with billing and analytics as first-class neighbours.",
       layers: [
         { label: "Interface", items: ["Generator", "Customiser", "Dashboard"] },
-        { label: "Application", items: ["Authentication", "QR management", "Plans and limits"] },
-        { label: "Redirect", items: ["Short links", "Destination lookup", "Scan capture"] },
-        { label: "Services", items: ["Paystack billing", "Analytics", "Hosting"] },
+        {
+          label: "Application",
+          items: ["Authentication", "QR management", "Plans and limits"],
+        },
+        {
+          label: "Redirect",
+          items: ["Short links", "Destination lookup", "Scan capture"],
+        },
+        {
+          label: "Services",
+          items: ["Paystack billing", "Analytics", "Hosting"],
+        },
       ],
     },
     decisions: [
@@ -198,6 +285,8 @@ export const projects: Project[] = [
       posts: ["dynamic-qr-codes-without-breaking-printed-codes"],
       projects: ["campus-connect", "boweneats"],
     },
+    liveUrl: "https://qrcode-nine-pied.vercel.app/",
+    year: "2026",
     todos: [
       "Add liveUrl / githubUrl / year and real screenshots.",
       "Confirm the full stack (auth provider, database, hosting) and list it under 'stack'.",
@@ -210,6 +299,7 @@ export const projects: Project[] = [
     slug: "boweneats",
     number: "03",
     title: "BowenEats",
+    year: "2024",
     tagline: "An early MERN build, end to end.",
     shortDescription:
       "A MERN-stack application: React on the front, an Express and Node.js API, and MongoDB for storage.",
@@ -270,6 +360,19 @@ export const projects: Project[] = [
   {
     slug: "lss-classification",
     number: "04",
+    thumbnail: {
+      src: "/mri.jpg",
+      alt: "Campus Connect dashboard",
+      width: 100,
+      height: 100,
+    },
+
+    heroImage: {
+      src: "/mri.jpg",
+      alt: "Campus Connect social platform",
+      width: 100,
+      height: 100,
+    },
     title: "Lumbar Spinal Stenosis Classification",
     tagline: "Attention-based deep learning on lumbar MRI.",
     shortDescription:
@@ -282,11 +385,18 @@ export const projects: Project[] = [
     status: "Completed · Grade A",
     role: "Researcher & Developer",
     kind: "research",
-    featured: false,
+    featured: true,
     art: "lss",
     stack: [
       { label: "Language", items: ["Python"] },
-      { label: "Method", items: ["Deep learning", "Attention mechanisms", "Image classification"] },
+      {
+        label: "Method",
+        items: [
+          "Deep learning",
+          "Attention mechanisms",
+          "Image classification",
+        ],
+      },
       { label: "Domain", items: ["Medical imaging", "MRI"] },
     ],
     problem: [
@@ -305,7 +415,10 @@ export const projects: Project[] = [
     architecture: {
       layers: [
         { label: "Data", items: ["MRI slices", "Labels"] },
-        { label: "Preparation", items: ["Preprocessing", "Train / test split"] },
+        {
+          label: "Preparation",
+          items: ["Preprocessing", "Train / test split"],
+        },
         { label: "Model", items: ["Deep network", "Attention mechanism"] },
         { label: "Output", items: ["Classification", "Evaluation"] },
       ],
@@ -394,5 +507,8 @@ export const intplusWork = [
   { name: "LockSec", note: "Security platform" },
   { name: "Ampersand Tech", note: "Rental-management dashboard" },
   { name: "Kings & Queen", note: "Chess administration tools" },
-  { name: "Blueprint", note: "Frontend and backend collaboration and leadership" },
+  {
+    name: "Blueprint",
+    note: "Frontend and backend collaboration and leadership",
+  },
 ];

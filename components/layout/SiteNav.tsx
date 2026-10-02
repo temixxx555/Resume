@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, m } from "motion/react";
-import { ArrowUpRight, Command } from "lucide-react";
+import { ArrowUpRight, Command, Search } from "lucide-react";
 import { contactHref, nav, personal, site, socials } from "@/data/site";
 import { cn } from "@/lib/utils";
 import { EASE } from "@/components/motion/MotionProvider";
@@ -102,8 +102,8 @@ export function SiteNav() {
               aria-label="Open command menu"
               className="hidden items-center gap-1.5 rounded-[5px] border border-line px-2 py-1.5 text-muted transition-colors hover:border-line-strong hover:text-fg lg:inline-flex"
             >
-              <Command className="size-3" aria-hidden="true" />
-              <span className="t-mono !text-[0.68rem]">K</span>
+              <Search className="size-3" aria-hidden="true" />
+              <span className=" !text-[0.92rem]">Search</span>
             </button>
             <Link
               href={contactHref}
@@ -190,7 +190,7 @@ function MobileMenu({ open, onClose, pathname }: { open: boolean; onClose: () =>
           transition={{ duration: 0.6, ease: EASE }}
         >
           <div className="wrap flex h-[var(--header-h)] shrink-0 items-center justify-between">
-            <span className="t-mono text-muted">Index</span>
+            <span className="text-[0.92rem] text-muted">AdebayoTemi</span>
             <button type="button" onClick={onClose} className="-mr-2 inline-flex h-11 items-center gap-3 px-2 text-[0.92rem]">
               <span>Close</span>
               <span aria-hidden="true" className="relative block size-5">

@@ -175,9 +175,7 @@ export default function RootLayout({
           <style>{`.js-reveal{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
         </noscript>
       </head>
-      <body className='min-h-svh'
-       cz-shortcut-listen="true"
-      >
+      <body className='min-h-svh' cz-shortcut-listen='true'>
         <a
           href='#main'
           className='fixed top-3 left-3 z-[100] -translate-y-20 rounded-md bg-fg px-4 py-2.5 text-sm font-medium text-bg transition-transform focus:translate-y-0'

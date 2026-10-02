@@ -35,6 +35,7 @@ export const experience: Role[] = [
     company: "EasySpend",
     role: "Frontend Engineer",
     period: "Apr 2026 — May 2026",
+    
     location: "Lagos, Nigeria",
     summary: "Fintech interfaces, shipped in short sprints with a fully remote team.",
     highlights: [

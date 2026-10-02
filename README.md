@@ -16,29 +16,29 @@ npm run lint
 
 ## Routes
 
-| Route | Purpose |
-| --- | --- |
-| `/` | Overview: hero, selected work, experience, capabilities, about, research, writing, contact |
-| `/work`, `/work/[slug]` | Case-study index and detailed case studies (`campus-connect`, `qr-platform`, `boweneats`, `lss-classification`) |
-| `/about`, `/experience` | Background, principles; roles, impact, education |
-| `/blog`, `/blog/[slug]` | MDX articles with TOC, progress bar, code highlighting, related posts |
-| `/contact` | Email, links and a validated form (`/api/contact`) |
-| `/resume` | Web résumé with PDF download and print styles |
-| `sitemap.xml`, `robots.txt`, `rss.xml`, `opengraph-image` | SEO and social |
+| Route                                                     | Purpose                                                                                                         |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `/`                                                       | Overview: hero, selected work, experience, capabilities, about, research, writing, contact                      |
+| `/work`, `/work/[slug]`                                   | Case-study index and detailed case studies (`campus-connect`, `qr-platform`, `boweneats`, `lss-classification`) |
+| `/about`, `/experience`                                   | Background, principles; roles, impact, education                                                                |
+| `/blog`, `/blog/[slug]`                                   | MDX articles with TOC, progress bar, code highlighting, related posts                                           |
+| `/contact`                                                | Email, links and a validated form (`/api/contact`)                                                              |
+| `/resume`                                                 | Web résumé with PDF download and print styles                                                                   |
+| `sitemap.xml`, `robots.txt`, `rss.xml`, `opengraph-image` | SEO and social                                                                                                  |
 
 `Cmd/Ctrl + K` opens a command palette. The console has a small greeting.
 
 ## Where to edit things
 
-| To change | Edit |
-| --- | --- |
-| Name, email, links, availability, portrait, site URL | `data/site.ts` |
-| Projects and case studies | `data/projects.ts` (one object per project; empty fields render nothing) |
-| Roles, education, certifications | `data/experience.ts` |
-| Skills matrix | `data/capabilities.ts` |
-| Articles | `content/blog/*.mdx` (frontmatter: `title description date updated category tags featured draft projects`) |
-| Colours, type, spacing, motion tokens | `app/globals.css` |
-| Résumé PDF | `public/adebayo-liberty-resume.pdf` |
+| To change                                            | Edit                                                                                                       |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Name, email, links, availability, portrait, site URL | `data/site.ts`                                                                                             |
+| Projects and case studies                            | `data/projects.ts` (one object per project; empty fields render nothing)                                   |
+| Roles, education, certifications                     | `data/experience.ts`                                                                                       |
+| Skills matrix                                        | `data/capabilities.ts`                                                                                     |
+| Articles                                             | `content/blog/*.mdx` (frontmatter: `title description date updated category tags featured draft projects`) |
+| Colours, type, spacing, motion tokens                | `app/globals.css`                                                                                          |
+| Résumé PDF                                           | `public/adebayo-liberty-resume.pdf`                                                                        |
 
 See `CONTENT-TODO.md` for everything that still needs your confirmation.
 
